@@ -1,0 +1,25 @@
+stages:
+- build
+- deploy
+
+build to development:
+    stage: build
+    script:
+        - composer update --ignore-platform-reqs
+        - composer install --ignore-platform-reqs
+        - /usr/bin/gitlab-sync $server_info_dev
+    environment:
+        name: development
+    only:
+        - master
+
+build to production:
+    stage: build
+    script:
+        - composer update --ignore-platform-reqs
+        - composer install --ignore-platform-reqs
+        - /usr/bin/gitlab-sync $server_info
+    environment:
+        name: production
+    only:
+        - tags
